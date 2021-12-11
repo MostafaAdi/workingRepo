@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Fragment #1 : Header files contains css and js references -->
+<head th:fragment="headerfiles">
+    <title>Estates</title>
+    <meta charset="UTF-8"/>
+    <link th:href="@{~/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{~/fontawesome/css/all.css}" rel="stylesheet">
+    <style>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+</head>
+<body>
+
+<!-- Fragment #2 : Navbar contains nav links -->
+<div th:fragment="nav">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+            
+             <li class="nav-item">
+                <a   href="#" class="nav-link">
+                  <i class="mdi mdi-file-document-box menu-icon"></i>
+                  <span class="menu-title">Estates</span>
+                </a>
+				 <div class="submenu">
+                      <ul>
+                          <li class="nav-item"><a class="nav-link" href="/estate/all">All Estates</a></li>
+                          <li class="nav-item"><a class="nav-link" href="/estate/sold">Sold Estates</a></li>
+                          <li class="nav-item"><a class="nav-link" href="/estate/unsold">Unsold Estates</a></li>
+                          <li class="nav-item"><a class="nav-link" href="/estate/add">Add Estate</a></li>
+                      </ul>
+                  </div>
+              </li>
+               <li class="nav-item">
+                <a   href="#" class="nav-link">
+                  <i class="mdi mdi-file-document-box menu-icon"></i>
+                  <span class="menu-title">Parameters</span>
+                </a>
+				 <div class="submenu">
+                      <ul>
+                          <li class="nav-item"><a class="nav-link" href="/params/view">View parameters</a></li>
+                          <li class="nav-item"><a class="nav-link" href="/params/update">Edit Parameters</a></li>
+                      </ul>
+                  </div>
+              </li>
+              <li class="nav-item">
+                <a   href="#" class="nav-link">
+                  <i class="mdi mdi-file-document-box menu-icon"></i>
+                  <span class="menu-title">export</span>
+                </a>
+				 <div class="submenu">
+                      <ul>
+                          <li class="nav-item"><a class="nav-link" href="/export/view">export settings</a></li>
+                      </ul>
+                  </div>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
+                <button sec:authorize="isAuthenticated()" class="btn btn-outline-danger my-2 my-sm-0 btn-sm" type="submit">Logout</button>
+            	<button sec:authorize="isAnonymous()" th:href="@{~/login}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">Login</button>
+            </form>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
