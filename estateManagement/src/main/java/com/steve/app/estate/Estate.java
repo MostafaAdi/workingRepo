@@ -48,7 +48,7 @@ public class Estate implements Serializable {
 	
 	private String addedBy = " "; 
 	
-	private String modefiedBy = " "; 
+	private String modifiedBy = " "; 
 	
 	private String createdAt = " " ;
 	
@@ -67,7 +67,7 @@ public class Estate implements Serializable {
 		this.sellDate = sellDate;
 		this.clientName = clientName;
 		this.addedBy = addedBy;
-		this.modefiedBy = modefiedBy;
+		this.modifiedBy = modefiedBy;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.selled = selled;

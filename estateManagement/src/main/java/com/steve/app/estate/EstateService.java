@@ -94,7 +94,7 @@ public class EstateService {
 			estateFromDb.setSharesCount(estate.getSharesCount());
 			estateFromDb.setSellPrice(estate.getSellPrice());
 			estateFromDb.setUpdatedAt(LocalDate.now().toString());
-			estateFromDb.setModefiedBy(this.get_current_User().getUsername());
+			estateFromDb.setModifiedBy(this.get_current_User().getUsername());
 			this.estateRepo.save(estateFromDb);
 			return 0 ;
 		}else {
@@ -103,7 +103,7 @@ public class EstateService {
 	}
 	
 	@Transactional
-	public int deleteE(int estateId ) {
+	public int deleteEstate(int estateId ) {
 		try {
 			this.estateRepo.deleteById(estateId);
 			return 0 ; 
@@ -114,25 +114,25 @@ public class EstateService {
 	
 	
 	public List<Estate> getNotSelledEstates(){
-		List<Estate> carsList = new ArrayList<Estate>() ; 
-		for(Estate car : this.estateRepo.findAll()) {
-			if(car.getClientName().equalsIgnoreCase("none")) {
-				carsList.add(car);
+		List<Estate> estatesList = new ArrayList<Estate>() ; 
+		for(Estate estate : this.estateRepo.findAll()) {
+			if(estate.getClientName().equalsIgnoreCase("none")) {
+				estatesList.add(estate);
 			}
 		}
-		return carsList ; 
+		return estatesList ; 
 	}
 	
 	@Transactional
-	public int sellCar(Estate estate) {
+	public int sellEstate(Estate estate) {
+		
 		Optional<Estate> optional = this.estateRepo.findById(estate.getId());
 		if(optional.isPresent()) {
 			if(estate.getVersion() != optional.get().getVersion()) {
 //				throw new ConflictException();
 			}
 			Estate dbEstate = optional.get();
-			
-
+		
 			dbEstate.setClientName(estate.getClientName());
 			dbEstate.setSellPrice(this.parameterService.getParameterValue("price_ratio") * estate.getPrice());
 			dbEstate.setSellDate(LocalDate.now().toString());
