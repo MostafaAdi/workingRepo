@@ -21,7 +21,7 @@ public class DbInitializer implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		addUsers();
+//		addUsers();
 		System.out.println("users added to system");
 		
 	}
