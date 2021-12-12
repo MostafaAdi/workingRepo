@@ -2,12 +2,15 @@ package com.steve.app.parameter;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.steve.app.estate.Estate;
 
 
 @Service
@@ -54,16 +57,25 @@ public class ParameterService {
 	}
 
 	
-	public Parameter updateParameter(Parameter parameter, int parameterId) {
+	public Parameter updateParameter(Parameter parameter) {
 		// TODO Auto-generated method stub
-		Parameter updated = parameterRepo.findById(parameterId).get();
-		if (updated == null) {
+		Optional<Parameter> updated = parameterRepo.findById(parameter.getId());
+		
+		if (updated.isEmpty()) {
 			throw new RuntimeException("parameter doesn't exist");
 		}
+		
+		if (parameter.getVersion() != updated.get().getVersion()) {
+//			throw new ConflictException();
+		}
+		
+		Parameter dbPrameter = updated.get();
 
-		parameter.setCreatedAt(LocalDate.now().toString());
-		parameter.setAddedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-		return parameterRepo.save(parameter);
+		dbPrameter.setUpdatedAt(LocalDate.now().toString());
+		dbPrameter.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+		dbPrameter.setParameterName(parameter.getParameterName());
+		dbPrameter.setParameterValue(parameter.getParameterValue());
+		return parameterRepo.save(dbPrameter);
 	}
 
 	
@@ -78,6 +90,15 @@ public class ParameterService {
 	public int getParameterValue(String pName) {
 		// TODO Auto-generated method stub
 		return parameterRepo.findByParameterName(pName).getParameterValue();
+	}
+
+	public Parameter getById(int parameterId) {
+		Optional<Parameter> parameter = this.parameterRepo.findById(parameterId);
+		if(parameter.isPresent()) {
+			return parameter.get();
+		}else {
+			return null ; 
+		}
 	}
 	
 }

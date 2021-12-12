@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		.authorizeRequests()
 		.antMatchers("/estates/**").authenticated()
 		.antMatchers("/params/**").authenticated()
-		.antMatchers("/export/**").authenticated()
+		.antMatchers("/publish/**").authenticated()
 		.and()
 		.formLogin().defaultSuccessUrl("/index")
 		.loginPage("/login").permitAll()

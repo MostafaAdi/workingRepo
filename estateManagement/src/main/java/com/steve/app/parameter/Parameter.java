@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,4 +48,7 @@ public class Parameter implements Serializable{
 	
 	@Column(nullable = true, length = 40)
 	private String updatedAt;
+	
+	@Version
+	private long version;
 }
