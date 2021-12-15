@@ -1,6 +1,5 @@
 package com.steve.app.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -47,13 +46,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http 
 		.csrf().disable()
 		.authorizeRequests()
-		.antMatchers("/estates/**").authenticated()
-		.antMatchers("/params/**").authenticated()
-		.antMatchers("/publish/**").authenticated()
+			.antMatchers("/register").permitAll()
+			.antMatchers("/estates/**").authenticated()
+			.antMatchers("/params/**").authenticated()
+			.antMatchers("/publish/**").authenticated()
+			.antMatchers("/new").hasAuthority("ADMIN")
+			.antMatchers("/edit/**").hasAuthority("ADMIN")
+			.antMatchers("/delete/**").hasAuthority("ADMIN")
 		.and()
 		.formLogin().defaultSuccessUrl("/index")
-		.loginPage("/login").permitAll()
+			.loginPage("/login")
+			.permitAll()
 		.and()
-		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
+		.logout()
+			.invalidateHttpSession(true)
+	        .clearAuthentication(true)
+			.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
+		.and()
+    	.exceptionHandling().accessDeniedPage("/403");
 	}
 }

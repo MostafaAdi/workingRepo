@@ -1,14 +1,24 @@
 package com.steve.app.security;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,128 +32,45 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id ;
 	
-	@Column(nullable = false)
-	private String password = " ";
-	private String username ;
-	private String UserPermissions = "none" ;
-	private String UserRoles ="none";
+	@Column(nullable = false, unique = true, length = 255)
+	private String email;
 	
-	private LocalDateTime createdAt ; 
-	private boolean Active = false ;
+	@Column(nullable = false, length = 255)
+	private String password;
 	
-	public User() {
-		this.createdAt = LocalDateTime.now();
-		this.UserRoles = "none"; 
-		this.UserPermissions = "none";
-	}
+	@Column(nullable = false, length = 255)
+	private String firstName;
 	
-	public User(String password, String username, String userPermissions,
-			String userRoles, boolean isActive) {
-		this.password = password;
-		this.username = username;
-		if(userPermissions.equalsIgnoreCase("") || userPermissions.equalsIgnoreCase(" "))
-			this.UserPermissions = "none";
-		else 
-			this.UserPermissions = userPermissions ; 
-		if(userRoles.equalsIgnoreCase("") || userRoles.equalsIgnoreCase(" "))
-			this.UserRoles = "none";
-		else 
-			this.UserRoles = userRoles; 
-		this.Active = isActive;
-		this.createdAt = LocalDateTime.now(); 
-	}
+	@Column(nullable = false, length = 255)
+	private String lastName;
 	
-	public void flatUserDetailes() {
-		System.out.println("user ID : "+this.id+" username :"+this.username+" role "+this.UserRoles +" permissions : "+this.UserPermissions);
-	}
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "users_roles",
+			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+			)
+	private Set<Role> roles = new HashSet<>();
 	
-	public boolean hasRole(String role) {
-		if(this.UserRoles.equalsIgnoreCase(" ")) {
-			return false ; 
-		}
-		else if (!this.convertRolesToList().contains(role)) {
-			return false ;
-		}
-		return true ; 
+	@CreatedBy
+	private String createdBy;
+	
+	@LastModifiedBy
+	private String modifiedBy;
+	
+	@CreatedDate
+	private Date createdAt;
+	
+	@LastModifiedDate
+	private Date modifiedAt;
+	
+	private boolean active;
+	
+	public void addRole(Role role) {
+		this.roles.add(role);
 	}
 	
-	public boolean hasPermission(String permission) {
-		if(this.UserPermissions.equalsIgnoreCase(" ")) {
-			return false ; 
-		}
-		else if (!this.convertPermissionsToList().contains(permission)) {
-			return false  ; 
-		}
-		return true ; 
-	}
-
-	public void addRole(String role ) {
-		if(this.UserRoles.equalsIgnoreCase(" ") || this.UserRoles.equalsIgnoreCase("")) {
-			this.UserRoles=role;
-		}else
-		this.UserRoles+=","+role;
-	}
 	
-	public void addPermission(String permission ) {
-		if(this.UserPermissions.equalsIgnoreCase(" ") || this.UserPermissions.equalsIgnoreCase("")) {
-			this.UserPermissions=permission;
-		}else
-		this.UserPermissions+=","+permission;
-	}
-
-	public List<String> convertPermissionsToList(){
-		if(this.UserPermissions.equalsIgnoreCase("")) {
-			return null ; 
-		}
-		else {
-			List<String> userPermissions = new ArrayList<String>() ;
-			String[] permissions = this.UserPermissions.split(",");
-			for(int i = 0 ; i<permissions.length ; i++) {
-				userPermissions.add(permissions[i]);
-			}
-			return userPermissions ; 
-		}
-	}
 	
-	public List<String> convertRolesToList(){
-		if(this.UserRoles.equalsIgnoreCase("")) {
-			return null ; 
-		}
-		else {
-			List<String> userRoles = new ArrayList<String>() ;
-			String[] roles = this.UserRoles.split(",");
-			for(int i =0 ; i < roles.length ; i++) {
-				userRoles.add(roles[i]); 
-			}
-			return userRoles ; 
-			
-		}
-	}
-	
-	public void revokeRoleFromUser(String role ) {
-		List<String> userRoles = this.convertRolesToList() ; 
-		if(userRoles.size() != 0 ) {
-		if(userRoles.contains(role)) {
-			userRoles.remove(userRoles.indexOf(role));
-			this.UserRoles = "";
-			for(String tempRole : userRoles) {
-				this.addRole(tempRole);
-				}
-			}
-		}
-	}
-	
-	public void revokePermissionFromUser(String permission) {
-		List<String> userPermissions = this.convertPermissionsToList();
-		if(userPermissions.size() != 0 ) {
-			if(userPermissions.contains(permission)) {
-				userPermissions.remove(permission);
-				this.UserPermissions = "";
-				for(String tempPermission : userPermissions) {
-					this.addPermission(tempPermission);
-				}
-			}
-		}
-	}
 
 }

@@ -1,12 +1,20 @@
 package com.steve.app.estate;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Version;
+
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +23,7 @@ import lombok.Setter;
 
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,7 +40,7 @@ public class Estate implements Serializable {
     private int id;
 
 	@Version
-	private Long version; 
+	private long version; 
 	
 	private String estateName = " " ; 
 	
@@ -45,33 +54,30 @@ public class Estate implements Serializable {
 	
 	private String clientName = "none";
 
+	@CreatedBy
+	private String addedBy; 
 	
-	private String addedBy = " "; 
+	@LastModifiedBy
+	private String modifiedBy; 
 	
-	private String modifiedBy = " "; 
+	@CreatedDate
+	private Date createdAt;
 	
-	private String createdAt = " " ;
-	
-	private String updatedAt = " ";
+	@LastModifiedDate
+	private Date updatedAt;
 	
 	private boolean selled = false ;
 
-	public Estate(Long version, String estateName, int price, int sellPrice, int sharesCount, String sellDate,
-			String clientName, String addedBy, String modefiedBy, String createdAt, String updatedAt, boolean selled) {
+	public Estate(int id, String estateName, int price, int sharesCount, String clientName, boolean selled) {
 		super();
-		this.version = version;
 		this.estateName = estateName;
 		this.price = price;
-		this.sellPrice = sellPrice;
 		this.sharesCount = sharesCount;
-		this.sellDate = sellDate;
 		this.clientName = clientName;
-		this.addedBy = addedBy;
-		this.modifiedBy = modefiedBy;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 		this.selled = selled;
 	}
+
+	
 	
 	
 }

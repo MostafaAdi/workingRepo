@@ -15,8 +15,9 @@
 		            <th> parameterValue </th>
 		            <th> addedBy </th>
 		            <th> createdAt </th>
-		            <th> modefiedBy </th>
+		            <th> modifiedBy </th>
 		            <th> updatedAt </th>
+		            <th> action </th>
 		            <th> action </th>
 		        </tr>
 		    </thead>
@@ -31,7 +32,13 @@
 		            <td><span th:text="${parameter.createdAt}"> createdAt </span></td>
 		            <td><span th:text="${parameter.modifiedBy}"> modifiedBy </span></td>
 		            <td><span th:text="${parameter.updatedAt}"> updatedAt </span></td>
-		            
+					<td>
+						<form action="#" th:action="@{/params/update/} + ${{parameter.id}}" method="get">
+							<button th:id="'table_entry_childs_button_' + ${parameter.id}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">
+								<i>Edit</i>
+							</button>
+						</form>
+					</td>
 			        <td>
 			            <form action="#" th:action="@{/params/del/} + ${{parameter.id}}" method="get">
 			                <button th:id="'table_entry_childs_button_' + ${parameter.id}" class="btn btn-outline-info my-2 my-sm-0 btn-sm" type="submit">
@@ -43,6 +50,16 @@
 		    </tbody>
 		</table>    	
     </div>
+	<div>
+		<!--        <h3><a th:href="@{/parameters}">parameters</a></h3>-->
+<!--		<h3><a th:href="@{/params/update/}">Edit</a></h3>-->
+<!--		<h3><a th:href="@{/params/add/}">Create New Parameter</a></h3>-->
+<!--		<h3><a th:href="@{/params/delet/}">Delete Parameter</a></h3>-->
+
+<!--		<h3><a th:href="@{/users}">List of Users</a></h3>-->
+		<!--        <h3><a th:href="@{/edit_parameters/}">Edit</a></h3>-->
+	</div>
+
 </div>
 </body>
 </html>

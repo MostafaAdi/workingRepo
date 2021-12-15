@@ -8,15 +8,36 @@
     <div class="jumbotron">
         	
 	<h1>sell Estate</h1>
-    <form action="#" th:action="@{/estates/sell}" th:object="${estate}" method="post">
+    <form action="#" th:action="@{/estates/checkout}" th:object="${estate}" method="post">
     	<p hidden>ID: <input type="text" th:field="*{id}" readonly/></p>
     	<p hidden>version: <input type="text" th:field="*{version}" readonly/></p>
-    	<p>estateName: <input type="text" th:field="*{estateName}" readonly/></p>
-    	<p>price: <input type="text" th:field="*{price}" readonly/></p>
-    	<p>sharesCount: <input type="text" th:field="*{sharesCount}" readonly/></p>
-    	<p>sellPrice: <input type="text" th:field="*{sellPrice}" readonly/></p>
-    	<p>clientName: <input type="text" th:field="*{clientName}" required/></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    	
+    	<div class="form-group row">
+            <label class="col-4 col-form-label">Price: </label>
+            <div class="col-8">
+                <input type="number" th:field="*{price}" class="form-control"
+                       required readonly/>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label class="col-4 col-form-label">Client Name: </label>
+            <div class="col-8">
+                <input type="text" th:field="*{clientName}" class="form-control"
+                       required minlength="6" maxlength="10"/>
+            </div>
+        </div>
+        
+        <div>
+            <button type="submit" class="btn btn-primary">Sell</button>
+        </div>
+        
+<!--     	<p>estateName: <input type="text" th:field="*{estateName}" readonly/></p> -->
+<!--     	<p>price: <input type="text" th:field="*{price}" readonly/></p> -->
+<!--     	<p>sharesCount: <input type="text" th:field="*{sharesCount}" readonly/></p> -->
+<!--     	<p>sellPrice: <input type="text" th:field="*{sellPrice}" readonly/></p> -->
+<!--     	<p>clientName: <input type="text" th:field="*{clientName}" required/></p> -->
+<!--         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p> -->
     </form>
 	
     </div>

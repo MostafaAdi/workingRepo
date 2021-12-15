@@ -6,16 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.steve.app.exceptions.NoEstateFoundException;
 import com.steve.app.parameter.ParameterService;
-import com.steve.app.security.User;
-import com.steve.app.security.UserRepository;
 
 @Service
 public class EstateService {
@@ -26,28 +22,36 @@ public class EstateService {
 	@Autowired
 	private ParameterService parameterService;
 	
-	@Transactional
-	public int addEstate(Estate estate ) {
-		try{
-			if(estate.getSharesCount() == 0 ) {
-				estate.setSharesCount(this.parameterService.getParameterValue("default_shares"));
-			}
-			estate.setCreatedAt(LocalDate.now().toString());
-			estate = this.estateRepo.save(estate);
-			return 0 ; 
-		}catch(Exception e){
-			throw new ServiceException("could not add estate!") ;
+	
+	public Estate getById(int estateId) {
+		Optional<Estate> optional = estateRepo.findById(estateId);
+		if (optional.isEmpty()) {
+			 throw new NoEstateFoundException("No estate with this ID");
+		}
+      
+        return optional.get();
+	}
+	
+	public Estate getByName(String estateName) {
+		Estate estate = this.estateRepo.findByEstateName(estateName);
+		if(estate != null) {
+			return estate;
+		}else {
+			return null ; 
 		}
 	}
 	
 	
-	public Estate getById(int estateId ) {
-		Optional<Estate> estate = this.estateRepo.findById(estateId);
-		if(estate.isPresent()) {
-			return estate.get();
-		}else {
-			return null ; 
+	
+	@Transactional
+	public Estate addEstate(Estate estate) {
+		Estate check = estateRepo.findByEstateName(estate.getEstateName());
+		if (check != null) {
+			throw new RuntimeException("estate already exists!");
+
 		}
+		
+		return estateRepo.save(estate);
 	}
 	
 	
@@ -93,8 +97,7 @@ public class EstateService {
 			estateFromDb.setPrice(estate.getPrice());
 			estateFromDb.setSharesCount(estate.getSharesCount());
 			estateFromDb.setSellPrice(estate.getSellPrice());
-			estateFromDb.setUpdatedAt(LocalDate.now().toString());
-			estateFromDb.setModifiedBy(this.get_current_User().getUsername());
+			
 			this.estateRepo.save(estateFromDb);
 			return 0 ;
 		}else {
@@ -103,13 +106,12 @@ public class EstateService {
 	}
 	
 	@Transactional
-	public int deleteEstate(int estateId ) {
-		try {
-			this.estateRepo.deleteById(estateId);
-			return 0 ; 
-		}catch(Exception e ) {
-			throw new ServiceException("cannot delete estate!") ; 
-		}
+	public void deleteEstate(int estateId) throws NoEstateFoundException{
+		Optional<Estate> estate = estateRepo.findById(estateId);
+        if(estate.isEmpty()){
+            throw new NoEstateFoundException("No such Employee found");
+        }
+        estateRepo.deleteById(estateId);
 	}
 	
 	
@@ -147,22 +149,6 @@ public class EstateService {
 	
 	
 	
-	@Autowired
-	private UserRepository userRepo ; 
 	
-	private User get_current_User() {
-		String username ; 
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    Object principal =  auth.getPrincipal();
-	    if(principal instanceof UserDetails) {
-	    	username = ((UserDetails) principal).getUsername() ; 
-		    for(User user : this.userRepo.findAll()) {
-		    	if(user.getUsername().equalsIgnoreCase(username)) {
-		    		return user ; 
-		 		}
-		 	}
-	    }
-	    return null  ; 
-    }
 
 }

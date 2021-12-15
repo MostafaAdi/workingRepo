@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EstateRepository extends JpaRepository<Estate, Integer>{
 
+	Estate findByEstateName(String estateName);
 }

@@ -1,19 +1,20 @@
 package com.steve.app.parameter;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
-import com.steve.app.estate.Estate;
+
 
 
 @Service
+@CacheConfig(cacheNames = "addresses")
 public class ParameterService {
 
 	@Autowired
@@ -26,13 +27,13 @@ public class ParameterService {
 			Parameter default_shares = new Parameter();
 			default_shares.setParameterName("default_shares");
 			default_shares.setParameterValue(5);
-			default_shares.setCreatedAt(LocalDate.now().toString());
+			
 			
 			
 			Parameter price_ratio = new Parameter();
 			price_ratio.setParameterName("price_ratio");
 			price_ratio.setParameterValue(10);
-			price_ratio.setCreatedAt(LocalDate.now().toString());
+			
 			
 			
 			this.parameterRepo.saveAll(List.of(default_shares, price_ratio));
@@ -51,12 +52,11 @@ public class ParameterService {
 			throw new RuntimeException("parameter already exists!");
 
 		}
-		parameter.setCreatedAt(LocalDate.now().toString());
-		parameter.setAddedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+		
 		return parameterRepo.save(parameter);
 	}
 
-	
+	@CacheEvict(value = "addresses", allEntries=true) 
 	public Parameter updateParameter(Parameter parameter) {
 		// TODO Auto-generated method stub
 		Optional<Parameter> updated = parameterRepo.findById(parameter.getId());
@@ -71,8 +71,7 @@ public class ParameterService {
 		
 		Parameter dbPrameter = updated.get();
 
-		dbPrameter.setUpdatedAt(LocalDate.now().toString());
-		dbPrameter.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+		
 		dbPrameter.setParameterName(parameter.getParameterName());
 		dbPrameter.setParameterValue(parameter.getParameterValue());
 		return parameterRepo.save(dbPrameter);
@@ -86,7 +85,7 @@ public class ParameterService {
 
 	}
 
-	
+	@CacheEvict(value = "addresses", allEntries=true) 
 	public int getParameterValue(String pName) {
 		// TODO Auto-generated method stub
 		return parameterRepo.findByParameterName(pName).getParameterValue();

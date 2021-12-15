@@ -16,7 +16,9 @@
             <th> sellDate </th>
             <th> clientName </th>
             <th> addedBy </th>
+            <th> modifiedBy </th>
             <th> createdAt </th>
+            <th> updatedAt </th>
             <th> sold </th>
             
         </tr>
@@ -30,10 +32,12 @@
             <td><span th:text="${estate.price}"> price </span></td>
             <td><span th:text="${estate.sellPrice}"> sellPrice </span></td>
             <td><span th:text="${estate.sharesCount}"> sharesCount </span></td>
-            <td><span th:text="${estate.dateOfBuy}"> sellDate </span></td>
+            <td><span th:text="${estate.sellDate}"> sellDate </span></td>
             <td><span th:text="${estate.clientName}"> clientName </span></td>
             <td><span th:text="${estate.addedBy}"> addedBy </span></td>
+            <td><span th:text="${estate.modifiedBy}"> modifiedBy </span></td>
             <td><span th:text="${estate.createdAt}"> createdAt </span></td>
+            <td><span th:text="${estate.updatedAt}"> updatedAt </span></td>
             <td><span th:text="${estate.selled}"> sold </span></td>
         </tr>
     </tbody>

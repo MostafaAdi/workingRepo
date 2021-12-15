@@ -3,6 +3,7 @@ package com.steve.app.security;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,18 +23,14 @@ public class UserPrincipal implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>(); 
-	
-		this.user.convertPermissionsToList().forEach(p-> {
-			GrantedAuthority authority = new SimpleGrantedAuthority(p) ; 
-			authorities.add(authority);
-		});
 		
-		//list of roles 
-		this.user.convertRolesToList().forEach(r-> {
-			GrantedAuthority authority = new SimpleGrantedAuthority(r) ; 
-			authorities.add(authority);
-		});
+		Set<Role> roles = user.getRoles();
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		
+		for (Role role : roles) {
+			authorities.add(new SimpleGrantedAuthority(role.getName()));
+			
+		}
 		
 		return authorities;
 	}
@@ -47,7 +44,7 @@ public class UserPrincipal implements UserDetails{
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return this.user.getUsername();
+		return this.user.getEmail();
 	}
 
 	@Override
@@ -72,6 +69,10 @@ public class UserPrincipal implements UserDetails{
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return this.user.isActive() == true ;
+	}
+	
+	public String getFullName() {
+		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
 
 }
