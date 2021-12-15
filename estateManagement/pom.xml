@@ -112,6 +112,7 @@
 		    <artifactId>derby</artifactId>
 		    <scope>runtime</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>

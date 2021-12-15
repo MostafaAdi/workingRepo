@@ -85,9 +85,9 @@ public class EstateService {
 	public int updateEstate(Estate estate) {
 		Optional<Estate> optional = this.estateRepo.findById(estate.getId());
 		if(optional.isPresent()) {
-			if(estate.getVersion() != optional.get().getVersion()) {
-//				throw new ConflictException();
-			}
+//			if(estate.getVersion() != optional.get().getVersion()) {
+////				throw new ConflictException();
+//			}
 			Estate estateFromDb = optional.get();
 		 
 		
@@ -130,9 +130,9 @@ public class EstateService {
 		
 		Optional<Estate> optional = this.estateRepo.findById(estate.getId());
 		if(optional.isPresent()) {
-			if(estate.getVersion() != optional.get().getVersion()) {
-//				throw new ConflictException();
-			}
+//			if(estate.getVersion() != optional.get().getVersion()) {
+////				throw new ConflictException();
+//			}
 			Estate dbEstate = optional.get();
 		
 			dbEstate.setClientName(estate.getClientName());

@@ -11,10 +11,38 @@
     <form action="#" th:action="@{/estates/update}" th:object="${estate}" method="post">
     	<p hidden>ID: <input type="text" th:field="*{id}" readonly/></p>
     	<p hidden>version: <input type="text" th:field="*{version}" readonly/></p>
-    	<p>estateName: <input type="text" th:field="*{estateName}" required/></p>
-    	<p>price: <input type="number" th:field="*{price}" min="0" required/></p>
-    	<p>sharesCount: <input type="number" th:field="*{sharesCount}" min="1" max="20" required/></p>
-        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+    	
+    	<div class="form-group row">
+           <label class="col-4 col-form-label">Estate Name: </label>
+           <div class="col-8">
+               <input type="text" th:field="*{estateName}" class="form-control"
+                      required minlength="6" maxlength="25"/>
+           </div>
+       </div>
+       
+       <div class="form-group row">
+           <label class="col-4 col-form-label">Price: </label>
+           <div class="col-8">
+               <input type="number" th:field="*{price}" class="form-control"
+                      required />
+           </div>
+       </div>
+       
+       <div class="form-group row">
+           <label class="col-4 col-form-label">Shares Count: </label>
+           <div class="col-8">
+               <input type="number" th:field="*{sharesCount}" class="form-control"
+                      required />
+           </div>
+       </div>
+       
+       <div>
+           <button type="submit" class="btn btn-primary">Update</button>
+       </div>
+<!--     	<p>estateName: <input type="text" th:field="*{estateName}" required/></p> -->
+<!--     	<p>price: <input type="number" th:field="*{price}" min="0" required/></p> -->
+<!--     	<p>sharesCount: <input type="number" th:field="*{sharesCount}" min="1" max="20" required/></p> -->
+<!--         <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p> -->
     </form>
 	
     </div>
